@@ -9,7 +9,7 @@ npm install
 npm start
 ```
 
-Open http://localhost:3000 in two browser tabs, join with different names, then press START MATCH. WASD / arrow keys move, mouse aims, hold mouse button to shoot. Yellow squares refill ammo. Red zone deals damage. Last survivor wins.
+Open http://localhost:3000 in two browser tabs, join with different names, then press START MATCH. WASD / arrow keys move, mouse aims, hold mouse button to shoot. Yellow squares refill ammo. Red zone deals damage. Last survivor wins. After the round ends, any connected player can click PLAY AGAIN to reset the lobby without restarting the server.
 
 ## Deploy
 
@@ -17,4 +17,4 @@ Deploy as a **Node.js web service** (e.g. Render or Railway) with build command 
 
 ## Current limitations
 
-Prototype: one shared room, no persistence, no anti-cheat, no authentication, no match restart UI, and no touch controls. Server is authoritative for movement and damage but client input should be further rate-limited before public launch.
+Prototype: one shared room, no persistence, no anti-cheat, no authentication, and no touch controls. Server is authoritative for movement and damage but client input should be further rate-limited before public launch.
