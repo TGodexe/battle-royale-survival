@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: battle-royale-survival
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
