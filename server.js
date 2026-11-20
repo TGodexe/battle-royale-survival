@@ -7,7 +7,7 @@ const W=1800,H=1200, players=new Map(), bullets=[], loot=[];
 let phase='waiting', start=0, winner='', zone={x:W/2,y:H/2,r:850};
 const rand=(a,b)=>Math.random()*(b-a)+a;
 const spawn=()=>({x:rand(80,W-80),y:rand(80,H-80)});
-function reset(){players.clear();bullets.length=0;loot.length=0;for(let i=0;i<35;i++)loot.push({...spawn(),id:i});phase='waiting';winner='';zone={x:W/2,y:H/2,r:850};}
+function reset(keepPlayers=false){if(!keepPlayers)players.clear();else for(const p of players.values())Object.assign(p,{...spawn(),hp:100,ammo:25,kills:0,alive:true,angle:0,input:{},lastShot:0});bullets.length=0;loot.length=0;for(let i=0;i<35;i++)loot.push({...spawn(),id:i});phase='waiting';winner='';zone={x:W/2,y:H/2,r:850};}
 reset();
 io.on('connection',s=>{
  s.on('join',raw=>{
@@ -17,7 +17,8 @@ io.on('connection',s=>{
   s.emit('joined',s.id);io.emit('notice',`${name} joined (${players.size})`);
  });
  s.on('input',v=>{const p=players.get(s.id);if(!p||!p.alive)return;p.input={up:!!v?.up,down:!!v?.down,left:!!v?.left,right:!!v?.right,shoot:!!v?.shoot};if(Number.isFinite(v?.angle))p.angle=v.angle;});
- s.on('start',()=>{if(phase==='waiting'&&players.size>=2){phase='playing';start=Date.now();io.emit('notice','Battle started!');}});
+ s.on('rematch',()=>{if(phase!=='ended'||!players.has(s.id)||players.size<2)return;reset(true);io.emit('notice','New lobby ready! Start the next match.');});
+ s.on('start',()=>{if(phase==='waiting'&&players.has(s.id)&&players.size>=2){phase='playing';start=Date.now();io.emit('notice','Battle started!');}});
  s.on('disconnect',()=>{players.delete(s.id);});
 });
 let previous=Date.now();
