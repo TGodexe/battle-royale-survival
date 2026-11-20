@@ -16,7 +16,7 @@ io.on('connection',socket=>{
  socket.on('join',name=>{
   if(players.has(socket.id))return;
   const p={id:socket.id,name:safeName(name),x:WIDTH*TILE/2,y:HEIGHT*TILE/2,color:['#f6bd60','#7bdff2','#b2f7a6','#f7a8b8'][players.size%4],inventory:{dirt:15,stone:8,wood:10,grass:10,sand:10,leaves:5},input:{}};
-  players.set(socket.id,p);socket.emit('welcome',{id:socket.id,world,types,width:WIDTH,height:HEIGHT,tile:TILE});io.emit('players',publicPlayers());
+  players.set(socket.id,p);socket.emit('welcome',{id:socket.id,world,types,width:WIDTH,height:HEIGHT,tile:TILE});socket.emit('inventory',p.inventory);io.emit('players',publicPlayers());
  });
  socket.on('input',data=>{const p=players.get(socket.id);if(p)p.input={up:!!data?.up,down:!!data?.down,left:!!data?.left,right:!!data?.right};});
  socket.on('edit',data=>{
